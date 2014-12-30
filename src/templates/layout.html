@@ -1,0 +1,29 @@
+<!doctype html>
+<title>KANT</title>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+<div class=page>
+  <h1>KANT</h1>
+  <nav class=metanav>
+      <ul>
+          <li><a href="{{ url_for('show_keys') }}">{{ _('Keylist') }}</a></li>
+          {% if session.logged_in %}
+            <li><a href="{{ url_for('show_users') }}">{{ _('Userlist') }}</a></li>
+            <li><a href="{{ url_for('new_key') }}">{{ _('Add Key') }}</a></li>
+            <li><a href="{{ url_for('new_user') }}">{{ _('Add User') }}</a></li>
+          {% endif %}
+          {% if session.is_admin %}
+            <li><a href="{{ url_for('new_user') }}">{{ _('Adminlist') }}</a></li>
+            <li><a href="{{ url_for('new_user') }}">{{ _('New Admin') }}</a></li>
+          {% endif %}
+          {% if not session.logged_in %}
+            <li><a href="{{ url_for('login') }}">{{ _('Login') }}</a></li>
+          {% else %}
+            <li><a href="{{ url_for('logout') }}">{{ _('Logout') }}</a></li>
+          {% endif %}
+      </ul>
+  </nav>
+  {% for message in get_flashed_messages() %}
+    <div class=flash>{{ message }}</div>
+  {% endfor %}
+  {% block body %}{% endblock %}
+</div>

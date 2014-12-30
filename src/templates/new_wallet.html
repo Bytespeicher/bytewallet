@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block body %}
+  {% if session.logged_in %}
+    <form action="{{ url_for('save_user') }}" method=post class=add-entry>
+      <dl>
+        <dt>{{ _('Name') }}:
+        <dd><input type=text name=name>
+        <dt>{{ _('Phone') }}:
+        <dd><input type=text name=phone>
+        <dt>{{ _('Mail') }}:
+        <dd><input type=text name=mail>
+        <dd><input type=submit value={{ _('Save') }}>
+      </dl>
+    </form>
+  {% endif %}
+{% endblock %}
