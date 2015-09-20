@@ -23,6 +23,7 @@ app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
 babel = Babel(app)
 
+
 @babel.localeselector
 def get_locale():
     # if a user is logged in, use the locale from the user settings
@@ -31,11 +32,13 @@ def get_locale():
         return user.locale
     return request.accept_languages.best_match(LANGUAGES.keys())
 
+
 @babel.timezoneselector
 def get_timezone():
     user = getattr(g, 'user', None)
     if user is not None:
         return user.timezone
+
 
 def connect_db():
     """Connects to the specific database."""
@@ -43,12 +46,14 @@ def connect_db():
     rv.row_factory = sqlite3.Row
     return rv
 
+
 def init_db():
     """Initializes the database."""
     db = get_db()
     with app.open_resource('schema/schema.sql', mode='r') as f:
         db.cursor().executescript(f.read())
     db.commit()
+
 
 def get_db():
     """Opens a new database connection if there is none yet for the
