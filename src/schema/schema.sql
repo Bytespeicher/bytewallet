@@ -2,8 +2,9 @@ DROP TABLE IF EXISTS wallet;
 CREATE TABLE wallet (
   id          INTEGER   PRIMARY KEY AUTOINCREMENT,
   name        TEXT      UNIQUE,
-  money       REAL      NOT NULL,
+  money       INTEGER   DEFAULT 0,
   pin         TEXT      NOT NULL,
+  photo       TEXT      NOT NULL,
   last_update DATETIME  DEFAULT CURRENT_TIMESTAMP
 );
 

@@ -1,26 +1,41 @@
 {% extends "layout.html" %}
 {% block body %}
 <div class="row">
-  <form enctype="multipart/form-data" action="{{ url_for('create_wallet') }}" method=post class=add-entry>
+  <form enctype="multipart/form-data" action="{{ url_for('update_wallet') }}" method=post class=add-entry>
     <div class="six columns">
-      <label for=name>{{ _('Name') }}:</label>
-      <input class="u-full-width" type=text name=name placeholder="{{ _('Your name here') }}" required>
+      <label for=name>{{ _('Credits') }}:</label>
+      <input class="u-full-width" type=number pattern="[0-9]{4,}" name=money value="{{ wallet.money }}" required>
     </div>
     <div class="six columns">
-      <label for=pin>{{ _('pin') }}:</label>
-      <input type=number pattern="[0-9]{4,}" title="4 digits minimum" name=pin class="pin-password u-full-width" required placeholder="{{ _('A numeric pin') }}">
+      <label for=name>{{ _('Used something?') }}:</label>
+      <select name=preselection id=preselection class="u-full-width">
+	<option value="0">{{ _('Select your beverage or snack') }}</option>
+	<option value="3">Club Mate</option>
+      </select>
     </div>
 </div>
+<hr>
 <div class="row">
-    <div class="six columns">
-      <label for=photo>{{ _('Photo') }}</label>
+    <div class="twelve columns">
+      <label for=photo>{{ _('Change your photo') }}</label>
       <input type="file" accept="image/*" capture="camera" name="photo" id="photo">
-      <img id="photo-preview" style="width: 100px;height: 100px;">
+    </div>
+    <div class="twelve columns">
+      <img id="photo-preview" style="height: 100px;" src="/uploads/{{ wallet.photo }}">
     </div>
 </div>
+<hr>
 <div class="row">
     <div class="six columns">
-      <input type=submit value="{{ _('Save') }}" class="button-primary"> 
+      <label for=pin>{{ _('Change your pin') }}:</label>
+      <input type=number pattern="[0-9]{4,}" title="4 digits minimum" name=pin class="pin-password u-full-width" placeholder="{{ _('Change your numeric pin') }}">
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="twelve columns">
+      <input type=submit value="{{ _('Save') }}" class="button-primary u-full-width"> 
+      <input type="hidden" name="id" value="{{ wallet.id }}">
     </div>
   </form>
 </div>

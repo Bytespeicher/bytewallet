@@ -1,14 +1,14 @@
 # all the imports
 import os
 import sqlite3
-import datetime
 
-from flask import Flask, request, session, g, redirect, url_for, abort, \
-     render_template, flash
+from flask import Flask, request, session, g, url_for, render_template, \
+    redirect, flash, send_from_directory
 
-from flask.ext.babel    import Babel, gettext
-from passlib.apps       import custom_app_context as pwd_context
-from config             import LANGUAGES
+from flask.ext.babel import Babel, gettext
+from passlib.apps import custom_app_context as pwd_context
+from config import LANGUAGES, UPLOAD_FOLDER, ALLOWED_FILE_EXTENSIONS
+from werkzeug import secure_filename
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -18,6 +18,7 @@ app.config.update(dict(
     DEBUG=True,
     SECRET_KEY='development key',
     BABEL_DEFAULT_LOCALE='de',
+    UPLOAD_FOLDER=UPLOAD_FOLDER
 ))
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
@@ -81,8 +82,29 @@ def show_wallets():
 
     return render_template('show_wallets.html', keys=keys)
 
-@app.route('/check-pin', methods=['POST'])
-def check_ping():
+
+@app.route('/wallet/<wallet_id>')
+def wallet(wallet_id):
+    db = get_db()
+    cur = db.execute('SELECT id, name, money, photo FROM wallet WHERE id = ?',
+                     [wallet_id])
+
+    wallet = cur.fetchone()
+
+    if wallet is None:
+        flash(gettext('Requested wallet not found'))
+        return redirect(url_for('show_wallets'))
+
+    return render_template('edit_wallet.html', wallet=wallet)
+
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+
+@app.route('/update_wallet', methods=['POST'])
+def update_wallet():
     error = None
     if request.method == 'POST':
         db = get_db()
@@ -100,12 +122,43 @@ def check_ping():
             session['logged_in'] = True
     return render_template('check_pin.json', error=error)
 
-@app.route('/save-user', methods=['POST'])
-def save_admin():
-    if not session.get('logged_in'):
-        abort(401)
+@app.route('/new_wallet', methods=['GET'])
+def new_wallet():
+    return render_template('new_wallet.html')
+
+
+@app.route('/create_wallet', methods=['POST'])
+def create_wallet():
+    if 'name' not in request.form:
+        flash(gettext('You need to specify a name'))
+        return redirect(url_for('new_wallet'))
+
+    if 'pin' not in request.form:
+        flash(_('You need to specify a pin'))
+        return redirect(url_for('new_wallet'))
 
     db = get_db()
+    cur = db.execute('SELECT id FROM wallet WHERE name = ?',
+                     [request.form['name']])
+
+    if cur.fetchone() is not None:
+        flash(gettext('That name is already taken'))
+        return redirect(url_for('new_wallet'))
+
+    if 'photo' in request.files:
+        print(request.files['photo'])
+
+        def allowed_file(filename):
+            return '.' in filename and \
+                filename.rsplit('.', 1)[1] in ALLOWED_FILE_EXTENSIONS
+
+        file = request.files['photo']
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    else:
+        filename = ''
+
     password = pwd_context.encrypt(request.form['pin'])
 
     db.execute('INSERT INTO admins (name, mail, password) VALUES (?, ?, ?)',

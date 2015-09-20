@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block body %}
+{% for wallet_row in wallets | batch(3) %}
+  <div class="row">
+  {% for wallet in wallet_row %}
+  {% if wallet %}
+    <div class="button wallet six columns">
+      <a href="{{ url_for('wallet', wallet_id=wallet.id) }}">
+      <div class="wallet-name">{{ wallet.name }}</div>
+      <div class="wallet-money">{{ wallet.money }} ฿</div>
+      <img class="wallet-image" src="/uploads/{{ wallet.photo }}">
+    </div>
+  {% endif %}
+  {% endfor %}
+  <div>
+{% endfor %}
+{% endblock %}
