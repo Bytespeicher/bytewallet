@@ -109,7 +109,7 @@ def update_wallet():
     if request.method == 'POST':
         db = get_db()
         cur = db.execute('SELECT pin FROM wallet WHERE id = ?',
-                         [request.form['userid']])
+                         [request.form['id']])
 
         res = cur.fetchone()
 
