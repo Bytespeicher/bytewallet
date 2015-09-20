@@ -121,7 +121,8 @@ def update_wallet():
             error = gettext('Invalid PIN')
         else:
             session['logged_in'] = True
-    return render_template('check_pin.json', error=error)
+    return redirect(url_for('show_wallets'), error=error)
+
 
 @app.route('/new_wallet', methods=['GET'])
 def new_wallet():
