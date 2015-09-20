@@ -113,8 +113,8 @@ def update_wallet():
 
         res = cur.fetchone()
 
-        error = false
-        if res == None:
+        error = False
+        if res is None:
             error = gettext('Could not find user entry')
         elif pwd_context.verify(request.form['password'], res['password']) != True:
             error = gettext('Invalid PIN')
