@@ -163,17 +163,17 @@ def create_wallet():
 
     password = pwd_context.encrypt(request.form['pin'])
 
-    db.execute('INSERT INTO admins (name, mail, password) VALUES (?, ?, ?)',
-                [request.form['name'], request.form['mail'],
-                 password])
+    db.execute('INSERT INTO wallet (name, pin, photo) VALUES (?, ?, ?)',
+               [request.form['name'], password, filename])
 
     try:
         db.commit()
-        message = gettext('Changes saved successfully')
+        flash(gettext('Your wallet was added successfully'), 'success')
     except:
-        message = gettext('An error occured')
+        flash(gettext('An error occured'), 'error')
 
-    return render_template('save_user.json', message = message)
+    return redirect(url_for('show_wallets'))
+
 
 @app.route('/install')
 def install():
