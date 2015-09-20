@@ -75,12 +75,12 @@ def close_db(error):
 @app.route('/')
 def show_wallets():
     db = get_db()
-    cur = db.execute('SELECT id, name, money ' +
+    cur = db.execute('SELECT id, name, money, photo ' +
                      'FROM wallet ' +
                      'ORDER BY last_update DESC')
-    keys = cur.fetchall()
+    wallets = cur.fetchall()
 
-    return render_template('show_wallets.html', keys=keys)
+    return render_template('show_wallets.html', wallets=wallets)
 
 
 @app.route('/wallet/<wallet_id>')
