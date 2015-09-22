@@ -147,9 +147,8 @@ def create_wallet():
         flash(gettext('That name is already taken'))
         return redirect(url_for('new_wallet'))
 
+    filename = ''
     if 'photo' in request.files:
-        print(request.files['photo'])
-
         def allowed_file(filename):
             return '.' in filename and \
                 filename.rsplit('.', 1)[1] in ALLOWED_FILE_EXTENSIONS
@@ -158,8 +157,6 @@ def create_wallet():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    else:
-        filename = ''
 
     password = pwd_context.encrypt(request.form['pin'])
 
