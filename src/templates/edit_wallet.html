@@ -15,9 +15,9 @@
     </div>
 </div>
 <hr>
-<div class="row">
+<h3 id="photo-row-toggle" >+ {{ _('Change your photo') }}</h3>
+<div class="row" id="photo-row" style="display:none">
     <div class="twelve columns">
-      <label for=photo>{{ _('Change your photo') }}</label>
       <input type="file" accept="image/*" capture="camera" name="photo" id="photo">
     </div>
     <div class="twelve columns">
@@ -60,6 +60,10 @@
       }
     });
   }
+
+  jQuery('#photo-row-toggle').click(function(){
+    $('#photo-row').slideToggle();
+  });
 
   var input = jQuery( "#photo" )[0]
   root = input.createShadowRoot();
