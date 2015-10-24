@@ -1,9 +1,13 @@
 env
 src/*.db
 
+# App data folders
+src/uploads/*
+
 # Python
 *.pyc
 
 # Vim
 *.swp
+*.swo
 
