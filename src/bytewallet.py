@@ -188,7 +188,7 @@ def create_wallet():
 @app.route('/install')
 def install():
     init_db()
-    return render_template('install.html')
+    return "/install"
 
 
 if __name__ == '__main__':
