@@ -83,6 +83,19 @@ def show_wallets():
     return render_template('show_wallets.html', wallets=wallets)
 
 
+@app.route('/wallets/<search_string>')
+def search_wallets(search_string):
+    db = get_db()
+    cur = db.execute('SELECT id, name, money, photo ' +
+                     'FROM wallet ' +
+                     'WHERE name LIKE ?'
+                     'ORDER BY last_update DESC', ['%'+search_string+'%'])
+    wallets = cur.fetchall()
+
+    return render_template('show_wallets.html', wallets=wallets,
+                           search_string=search_string)
+
+
 @app.route('/wallet/<wallet_id>')
 def wallet(wallet_id):
     db = get_db()

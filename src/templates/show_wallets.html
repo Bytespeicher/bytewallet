@@ -1,17 +1,30 @@
 {% extends "layout.html" %}
 {% block body %}
-{% for wallet_row in wallets | batch(3) %}
-  <div class="row">
-  {% for wallet in wallet_row %}
-  {% if wallet %}
-    <div class="button wallet six columns">
-      <a href="{{ url_for('wallet', wallet_id=wallet.id) }}">
-      <div class="wallet-name">{{ wallet.name }}</div>
-      <div class="wallet-money">{{ wallet.money }} ฿</div>
-      <img class="wallet-image" src="/uploads/{{ wallet.photo }}">
+{% if wallets %}
+  {% if search_string %}
+    <div class="row">
+      Search for <b>{{ search_string }}</b> returned the following result(s):
     </div>
   {% endif %}
+  {% for wallet_row in wallets | batch(3) %}
+    <div class="row">
+    {% for wallet in wallet_row %}
+    {% if wallet %}
+      <div class="button wallet six columns">
+	<a href="{{ url_for('wallet', wallet_id=wallet.id) }}">
+	<div class="wallet-name">{{ wallet.name }}</div>
+	<div class="wallet-money">{{ wallet.money }} ฿</div>
+	<img class="wallet-image" src="/uploads/{{ wallet.photo }}">
+      </div>
+    {% endif %}
+    {% endfor %}
+    <div>
   {% endfor %}
-  <div>
-{% endfor %}
+{% else %}
+  {% if search_string %}
+    <div class="row">No wallets with <b>{{ search_string }}</b> found</div>
+  {% else %}
+    <div class="row">No wallets to show</div>
+  {% endif %}
+{% endif %}
 {% endblock %}

@@ -852,3 +852,8 @@ there.
 .wallet-name { width: 90%; font-size: 3rem; text-align: center; color: #222;}
 .wallet-money { width: 90%; font-size: 4rem; text-align: center; color: #222;position: absolute; bottom: 1rem; left: 10px; right: 10px;}
 .wallet-image { max-width: 100%; max-height: 40%; bottom: 30%;}
+
+#search-field { display:none; border:none; height: 100%; padding: 1em; padding-right:30px;}
+#search-submit-button { margin-left: -66px; width: 50px; display: none; }
+#search-button { padding: 0; }
+#search-button-text { padding: 0 30px; }

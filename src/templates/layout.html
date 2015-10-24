@@ -19,8 +19,12 @@
     <div class="container">
       <nav class=metanav>
         <a class="button" href="{{ url_for('show_wallets') }}">{{ _('Wallets') }}</a>
-        <a class="button" href="#search">{{ _('Search') }}</a>
         <a class="button" href="{{ url_for('new_wallet') }}">{{ _('New wallet') }}</a>
+        <a class="button" id="search-button" href="#search">
+	  <span id="search-button-text">{{ _('Search') }}</span>
+	  <input type="search" id="search-field" class="u-full-width" placeholder="{{ _('Search for wallet') }}" style="display:none">
+	  <button id="search-submit-button">&rarr;</button>
+	</a>
       </nav>
     </div>
 
@@ -28,3 +32,20 @@
     {% block body %}{% endblock %}
   </div>
 </div>
+<script>
+  jQuery('#search-button').click(function(){
+    if (jQuery('#search-button').data('open') != true) {
+      jQuery('#search-button')
+        .animate({width:'300px'},350)
+        .data('open', true);
+      jQuery('#search-button-text').hide();
+      jQuery('#search-field').show().focus();
+      jQuery('#search-submit-button').show();
+    }
+  });
+  jQuery('#search-submit-button').click(function() {
+    if(jQuery('#search-field').val()) {
+      window.location.href = '/wallets/' + jQuery('#search-field').val();
+    }
+  });
+</script>
