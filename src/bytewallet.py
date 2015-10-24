@@ -136,7 +136,7 @@ def create_wallet():
         return redirect(url_for('new_wallet'))
 
     if 'pin' not in request.form:
-        flash(_('You need to specify a pin'))
+        flash(gettext('You need to specify a pin'))
         return redirect(url_for('new_wallet'))
 
     db = get_db()
