@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # all the imports
 import os
 import sqlite3
@@ -5,7 +7,7 @@ import sqlite3
 from flask import Flask, request, session, g, url_for, render_template, \
     redirect, flash, send_from_directory
 
-from flask.ext.babel import Babel, gettext
+from flask_babel import Babel, gettext
 from passlib.apps import custom_app_context as pwd_context
 from config import LANGUAGES, UPLOAD_FOLDER, ALLOWED_FILE_EXTENSIONS
 from werkzeug import secure_filename
